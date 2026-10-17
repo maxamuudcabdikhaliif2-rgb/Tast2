@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Generator</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111827;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #1f2937;
+            padding: 25px;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 35px #0005;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .preview {
+            height: 170px;
+            border-radius: 15px;
+            background: #a855f7;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 2px 5px #0008;
+            transition: 0.2s;
+        }
+
+        .control {
+            margin-bottom: 18px;
+        }
+
+        .control label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: #a855f7;
+        }
+
+        select, .code-box {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #374151;
+            color: white;
+            font-size: 16px;
+        }
+
+        .code-box {
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #a855f7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        .random {
+            margin-top: 10px;
+            background: #0891b2;
+        }
+
+        h3 {
+            margin: 22px 0 12px;
+        }
+
+        .colors {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .color {
+            height: 42px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .color:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1> Color Generator</h1>
+
+        <div class="preview" id="preview">#A855F7</div>
+
+        <div class="control">
+            <label>
+                <span>Hue</span>
+                <span id="hueValue">285°</span>
+            </label>
+            <input type="range" id="hue" min="0" max="360" value="285">
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Saturation</span>
+                <span id="satValue">80%</span>
+            </label>
+            <input type="range" id="saturation" min="0" max="100" value="80">
+        </div>
+
+        <div class="control">
+            <label>
+                <span>Lightness</span>
+                <span id="lightValue">55%</span>
+            </label>
+            <input type="range" id="lightness" min="0" max="100" value="55">
+        </div>
+
+        <div class="control">
+            <label>Color format</label>
+            <select id="format">
+                <option value="HEX">HEX</option>
+                <option value="RGB">RGB</option>
+                <option value="HSL">HSL</option>
+            </select>
+        </div>
+
+        <div class="code-box" id="code">#A855F7</div>
+
+        <button id="copyBtn">Copy Color Code</button>
+        <button class="random" id="randomBtn"> Random Color</button>
+
+        <h3>Quick Colors</h3>
+
+        <div class="colors">
+            <div class="color" style="background:#ef4444" data-color="#ef4444"></div>
+            <div class="color" style="background:#f97316" data-color="#f97316"></div>
+            <div class="color" style="background:#eab308" data-color="#eab308"></div>
+            <div class="color" style="background:#22c55e" data-color="#22c55e"></div>
+            <div class="color" style="background:#06b6d4" data-color="#06b6d4"></div>
+            <div class="color" style="background:#3b82f6" data-color="#3b82f6"></div>
+            <div class="color" style="background:#a855f7" data-color="#a855f7"></div>
+            <div class="color" style="background:#ec4899" data-color="#ec4899"></div>
+        </div>
+    </div>
+
+    <script>
+        const hue = document.getElementById("hue");
+        const saturation = document.getElementById("saturation");
+        const lightness = document.getElementById("lightness");
+        const format = document.getElementById("format");
+        const preview = document.getElementById("preview");
+        const code = document.getElementById("code");
+
+        function updateColor() {
+            const h = Number(hue.value);
+            const s = Number(saturation.value);
+            const l = Number(lightness.value);
+
+            const hsl = `hsl(${h}, ${s}%, ${l}%)`;
+
+            preview.style.backgroundColor = hsl;
+            preview.style.color = l > 55 ? "#111827" : "#ffffff";
+
+            document.getElementById("hueValue").textContent = h + "°";
+            document.getElementById("satValue").textContent = s + "%";
+            document.getElementById("lightValue").textContent = l + "%";
+
+            const rgb = hslToRgb(h, s, l);
+
+            const hex = "#" + rgb.map(value =>
+                value.toString(16).padStart(2, "0")
+            ).join("").toUpperCase();
+
+            if (format.value === "HEX") {
+                code.textContent = hex;
+            } else if (format.value === "RGB") {
+                code.textContent = `rgb(${rgb.join(", ")})`;
+            } else {
+                code.textContent = hsl;
+            }
+
+            preview.textContent = hex;
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100;
+            l /= 100;
+
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+
+            const f = n =>
+                Math.round(255 * (
+                    l - a * Math.max(-1, Math.min(
+                        k(n) - 3,
+                        9 - k(n),
+                        1
+                    ))
+                ));
+
+            return [f(0), f(8), f(4)];
+        }
+
+        hue.addEventListener("input", updateColor);
+        saturation.addEventListener("input", updateColor);
+        lightness.addEventListener("input", updateColor);
+        format.addEventListener("change", updateColor);
+
+        document.getElementById("randomBtn").addEventListener("click", () => {
+            hue.value = Math.floor(Math.random() * 361);
+            saturation.value = Math.floor(Math.random() * 101);
+            lightness.value = Math.floor(Math.random() * 101);
+            updateColor();
+        });
+
+        document.getElementById("copyBtn").addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(code.textContent);
+                document.getElementById("copyBtn").textContent = " Copied!";
+                setTimeout(() => {
+                    document.getElementById("copyBtn").textContent =
+                        " Copy Color Code";
+                }, 1500);
+            } catch {
+                const text = document.createElement("textarea");
+                text.value = code.textContent;
+                document.body.appendChild(text);
+                text.select();
+                document.execCommand("copy");
+                text.remove();
+                alert("Color code copied!");
+            }
+        });
+
+        document.querySelectorAll(".color").forEach(color => {
+            color.addEventListener("click", () => {
+                const hex = color.dataset.color;
+                const r = parseInt(hex.slice(1, 3), 16) / 255;
+                const g = parseInt(hex.slice(3, 5), 16) / 255;
+                const b = parseInt(hex.slice(5, 7), 16) / 255;
+
+                const max = Math.max(r, g, b);
+                const min = Math.min(r, g, b);
+                const delta = max - min;
+
+                let h = 0;
+                if (delta !== 0) {
+                    if (max === r) h = 60 * (((g - b) / delta) % 6);
+                    else if (max === g) h = 60 * ((b - r) / delta + 2);
+                    else h = 60 * ((r - g) / delta + 4);
+                }
+
+                const l = (max + min) / 2;
+                const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+                hue.value = (h + 360) % 360;
+                saturation.value = Math.round(s * 100);
+                lightness.value = Math.round(l * 100);
+
+                updateColor();
+            });
+        });
+
+        updateColor();
+    </script>
+
+</body>
+</html>

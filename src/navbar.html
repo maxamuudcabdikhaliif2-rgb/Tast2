@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #101318;
+    }
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 5%;
+  background: #1e293b;
+  color: white;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .18);
+}
+
+.brand {
+  color: white;
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.site-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  transition: background .2s;
+}
+
+.site-nav a:hover,
+.site-nav a:focus {
+  background: #334155;
+}
+
+.nav-toggle {
+  display: none;
+  color: white;
+  background: transparent;
+  border: 0;
+  font-size: 23px;
+}
+    </style> 
+</head>
+<body>
+    <nav class="site-nav" id="siteNav">
+            <a href="./form.html">Login Form</a>
+            <a href="./color.html">Color Generator</a>
+            <a href="./number.html">Number Guess</a>
+            <a href="./Tictac.html">Tic Tac Toe</a>
+            <a href="./weather.html">Weather</a>
+            <a href="./progress.html">Progress Bar</a>
+        </nav>
+</body>
+<script>
+    const navToggle = document.getElementById("navToggle");
+const siteNav = document.getElementById("siteNav");
+
+navToggle.addEventListener("click", () => {
+  const isOpen = siteNav.classList.toggle("open");
+  navToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+siteNav.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    siteNav.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+  });
+});
+</script>
+</html>

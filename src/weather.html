@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cimilada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff
+        }
+
+        .card {
+            background: #ffffff12;
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 10px 30px #0005
+        }
+
+        h1 {
+            color: #00e5ff;
+            margin-bottom: 15px
+        }
+
+        .search {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #00e5ff;
+            font-size: 16px;
+            background: #fff;
+            color: #141e30;
+            min-width: 0
+        }
+
+        button {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 0;
+            background: #00e5ff;
+            color: #141e30;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer
+        }
+
+        #results {
+            margin-bottom: 15px;
+            text-align: left
+        }
+
+        #results button {
+            display: block;
+            width: 100%;
+            background: #ffffff1f;
+            color: #fff;
+            font-weight: normal;
+            font-size: 14px;
+            margin-bottom: 6px;
+            text-align: left
+        }
+
+        #results button:hover {
+            background: #ffffff33
+        }
+
+        #place {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px
+        }
+
+        #icon {
+            font-size: 64px
+        }
+
+        #temp {
+            font-size: 48px;
+            font-weight: bold
+        }
+
+        #desc {
+            color: #ddd;
+            margin: 5px 0 15px
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
+            color: #00e5ff;
+            margin-bottom: 20px;
+            font-size: 14px
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px
+        }
+
+        .day {
+            background: #ffffff14;
+            border-radius: 10px;
+            padding: 8px 2px;
+            font-size: 13px
+        }
+
+        .day b {
+            display: block;
+            margin-bottom: 4px
+        }
+
+        #status {
+            color: #ddd;
+            min-height: 20px;
+            margin-bottom: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>🌤️ Cimilada</h1>
+        <div class="search">
+            <input id="q" placeholder="eeg. Muqdisho"
+                onkeydown="if(event.key==='Enter')searchPlace()">
+            <button onclick="searchPlace()">🔍</button>
+        </div>
+        <div id="results"></div>
+        <div id="status"></div>
+        <div id="place"></div>
+        <div id="icon"></div>
+        <div id="temp"></div>
+        <div id="desc"></div>
+        <div class="row"><span id="hum"></span><span id="wind"></span></div>
+        <div class="days" id="days"></div>
+    </div>
+
+    <script>
+        const names = ["Axd", "Isn", "Tal", "Arb", "Kha", "Jim", "Sab"];
+        function info(c) {
+            if (c === 0) return ["☀️", "Cir la'aan"];
+            if (c <= 2) return ["🌤️", "Inta badan cad"];
+            if (c === 3) return ["☁️", "Daruur"];
+            if (c <= 48) return ["🌫️", "Ceeryaan"];
+            if (c <= 57) return ["🌦️", "Roob yar"];
+            if (c <= 67) return ["🌧️", "Roob"];
+            if (c <= 77) return ["❄️", "Baraf"];
+            if (c <= 82) return ["🌧️", "Roobab"];
+            return ["⛈️", "Onkod"];
+        }
+        const $ = id => document.getElementById(id);
+
+        async function searchPlace() {
+            const q = $("q").value.trim();
+            if (!q) return;
+            $("status").textContent = "Waa la raadinayaa...";
+            $("results").innerHTML = "";
+            try {
+                const r = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(q) + "&count=5&language=en");
+                const d = await r.json();
+                if (!d.results || !d.results.length) { $("status").textContent = "Meeshaas lama helin."; return }
+                $("status").textContent = "";
+                d.results.forEach(p => {
+                    const b = document.createElement("button");
+                    b.textContent = "📍 " + p.name + (p.admin1 ? ", " + p.admin1 : "") + (p.country ? ", " + p.country : "");
+                    b.onclick = () => { $("results").innerHTML = ""; loadWeather(p.latitude, p.longitude, p.name + (p.country ? ", " + p.country : "")) };
+                    $("results").appendChild(b);
+                });
+                if (d.results.length === 1) $("results").firstChild.click();
+            } catch (e) { $("status").textContent = "⚠️ Raadinta waa fashilantay (" + e.message + ")."; }
+        }
+
+        async function loadWeather(lat, lon, name) {
+            $("status").textContent = "Waa la soo rarayaa...";
+            try {
+                const url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
+                    "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code" +
+                    "&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto";
+                const r = await fetch(url);
+                if (!r.ok) throw new Error("fail");
+                const d = await r.json();
+                const c = d.current, i = info(c.weather_code);
+                $("place").textContent = name;
+                $("icon").textContent = i[0];
+                $("temp").textContent = Math.round(c.temperature_2m) + "°C";
+                $("desc").textContent = i[1];
+                $("hum").textContent = "💧 Qoyaanka: " + c.relative_humidity_2m + "%";
+                $("wind").textContent = "💨 Dabaysha: " + Math.round(c.wind_speed_10m) + " km/h";
+                $("days").innerHTML = d.daily.time.slice(0, 5).map((t, k) => {
+                    const x = info(d.daily.weather_code[k]);
+                    return '<div class="day"><b>' + names[new Date(t).getUTCDay()] + '</b>' + x[0] + '<br>' +
+                        Math.round(d.daily.temperature_2m_max[k]) + '° / ' + Math.round(d.daily.temperature_2m_min[k]) + '°</div>';
+                }).join("");
+                $("status").textContent = "";
+            } catch (e) {
+                $("status").textContent = "⚠️ Xogta lama helin (" + e.message + "). Hubi internetkaaga.";
+            }
+        }
+
+        loadWeather(2.05, 45.32, "Muqdisho, Somalia");
+    </script>
+</body>
+
+</html>

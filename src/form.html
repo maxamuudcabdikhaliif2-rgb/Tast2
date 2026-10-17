@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diiwaangelin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+    --bg: #1d6bca;
+    --card: #ffffff;
+    --text: #1d2433;
+    --muted: #6b7690;
+    --border: #d5dbe7;
+    --primary: #2f5bea;
+    --primary-dark: #2448c4;
+    --error: #d93a3a;
+    --success: #1f9d55;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card);
+    padding: 32px 28px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(30, 50, 100, 0.12);
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.field {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap > i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.input-wrap input {
+    width: 100%;
+    padding: 12px 42px 12px 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrap input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(47, 91, 234, 0.15);
+}
+
+.field.invalid .input-wrap input {
+    border-color: var(--error);
+}
+
+.field.valid .input-wrap input {
+    border-color: var(--success);
+}
+
+.toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.toggle:hover {
+    color: var(--text);
+}
+
+.error {
+    display: none;
+    margin-top: 5px;
+    font-size: 12.5px;
+    color: var(--error);
+}
+
+.field.invalid .error {
+    display: block;
+}
+
+/* Password strength bar */
+.strength {
+    height: 5px;
+    margin-top: 8px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength span {
+    display: block;
+    height: 100%;
+    width: 0;
+    transition: width 0.25s, background 0.25s;
+}
+
+/* Checkbox */
+.checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 400;
+    font-size: 13.5px;
+    cursor: pointer;
+}
+
+.checkbox input {
+    margin-top: 3px;
+    accent-color: var(--primary);
+}
+
+/* Submit */
+.submit {
+    width: 100%;
+    padding: 13px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit:hover {
+    background: var(--primary-dark);
+}
+
+.submit:focus-visible,
+.toggle:focus-visible {
+    outline: 3px solid rgba(47, 91, 234, 0.4);
+    outline-offset: 2px;
+}
+
+.success {
+    margin-top: 14px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--success);
+}
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Samee akoon</h1>
+        <p class="subtitle">Buuxi macluumaadkaaga si aad u diiwaangashid.</p>
+
+        <form id="registerForm" novalidate>
+            <div class="field">
+                <label for="fullName">Magaca oo dhan</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="fullName" name="fullName" placeholder="name" autocomplete="name">
+                </div>
+                <small class="error"></small>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="magacaaga@example.com" autocomplete="email">
+                </div>
+                <small class="error"></small>
+            </div>
+
+            <div class="field">
+                <label for="phone">Taleefan</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" id="phone" name="phone" placeholder="+252 61 234 5678" autocomplete="tel">
+                </div>
+                <small class="error"></small>
+            </div>
+
+            <div class="field">
+                <label for="password">Furaha sirta ah</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="Ugu yaraan 8 xaraf" autocomplete="new-password">
+                    <button type="button" class="toggle" aria-label="Muuji furaha sirta ah">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
+                <div class="strength"><span></span></div>
+                <small class="error"></small>
+            </div>
+
+            <div class="field">
+                <label for="confirmPassword">Xaqiiji furaha sirta ah</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Dib u qor furaha" autocomplete="new-password">
+                </div>
+                <small class="error"></small>
+            </div>
+
+            <div class="field checkbox">
+                <label>
+                    <input type="checkbox" id="terms">
+                    Waan aqbalay shuruudaha iyo qaanuunka khaaska ah
+                </label>
+                <small class="error"></small>
+            </div>
+
+            <button type="submit" class="submit">Diiwaangeli</button>
+            <p class="success" id="successMsg"></p>
+        </form>
+    </main>
+
+    <script>
+        const form = document.getElementById("registerForm");
+const fullName = document.getElementById("fullName");
+const email = document.getElementById("email");
+const phone = document.getElementById("phone");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirmPassword");
+const terms = document.getElementById("terms");
+const successMsg = document.getElementById("successMsg");
+const toggleBtn = document.querySelector(".toggle");
+const strengthBar = document.querySelector(".strength span");
+
+function setError(input, message) {
+    const field = input.closest(".field");
+    field.classList.add("invalid");
+    field.classList.remove("valid");
+    field.querySelector(".error").textContent = message;
+    return false;
+}
+
+function setValid(input) {
+    const field = input.closest(".field");
+    field.classList.remove("invalid");
+    field.classList.add("valid");
+    field.querySelector(".error").textContent = "";
+    return true;
+}
+
+function validateName() {
+    const value = fullName.value.trim();
+    if (value.length < 3) return setError(fullName, "Magaca waa inuu ugu yaraan 6 xaraf ahaadaa.");
+    return setValid(fullName);
+}
+
+function validateEmail() {
+    const value = email.value.trim();
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!pattern.test(value)) return setError(email, "Geli email sax ah.");
+    return setValid(email);
+}
+
+function validatePhone() {
+    const value = phone.value.trim();
+    const digits = value.replace(/\D/g, "");
+    if (!/^[+\d\s()-]+$/.test(value) || digits.length < 7 || digits.length > 15) {
+        return setError(phone, "Geli lambar taleefan sax ah.");
+    }
+    return setValid(phone);
+}
+
+function validatePassword() {
+    const value = password.value;
+    if (value.length < 8) return setError(password, "Furaha waa inuu ugu yaraan 8 xaraf ahaadaa.");
+    if (!/[A-Za-z]/.test(value) || !/\d/.test(value)) {
+        return setError(password, "Furuhu waa inuu leeyahay xarfo iyo lambarro.");
+    }
+    return setValid(password);
+}
+
+function validateConfirm() {
+    if (confirmPassword.value === "" || confirmPassword.value !== password.value) {
+        return setError(confirmPassword, "Labada furaha ma isle'eka.");
+    }
+    return setValid(confirmPassword);
+}
+
+function validateTerms() {
+    const field = terms.closest(".field");
+    if (!terms.checked) {
+        field.classList.add("invalid");
+        field.querySelector(".error").textContent = "Waa inaad aqbashaa shuruudaha.";
+        return false;
+    }
+    field.classList.remove("invalid");
+    field.querySelector(".error").textContent = "";
+    return true;
+}
+
+// Password strength bar
+function updateStrength() {
+    const v = password.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+    if (/\d/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+
+    const colors = ["#d93a3a", "#e8a33d", "#c9b92e", "#1f9d55"];
+    strengthBar.style.width = (v ? score * 25 : 0) + "%";
+    strengthBar.style.background = colors[Math.max(score - 1, 0)];
+}
+
+// Show / hide password
+toggleBtn.addEventListener("click", () => {
+    const show = password.type === "password";
+    password.type = show ? "text" : "password";
+    toggleBtn.querySelector("i").className = show ? "fa-solid fa-eye-slash" : "fa-solid fa-eye";
+});
+
+// Live validation after the user leaves a field
+fullName.addEventListener("blur", validateName);
+email.addEventListener("blur", validateEmail);
+phone.addEventListener("blur", validatePhone);
+password.addEventListener("input", () => {
+    updateStrength();
+    if (password.closest(".field").classList.contains("invalid")) validatePassword();
+});
+password.addEventListener("blur", validatePassword);
+confirmPassword.addEventListener("blur", validateConfirm);
+terms.addEventListener("change", validateTerms);
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    successMsg.textContent = "";
+
+    const results = [
+        validateName(),
+        validateEmail(),
+        validatePhone(),
+        validatePassword(),
+        validateConfirm(),
+        validateTerms(),
+    ];
+
+    if (results.every(Boolean)) {
+        // Halkan ka dir xogta server-ka (fetch / API)
+        const data = {
+            fullName: fullName.value.trim(),
+            email: email.value.trim(),
+            phone: phone.value.trim(),
+        };
+        console.log("Xogta la diiwaangeliyay:", data);
+
+        successMsg.textContent = "Si guul leh ayaad u diiwaangashay!";
+        form.reset();
+        strengthBar.style.width = "0";
+        form.querySelectorAll(".field").forEach((f) => f.classList.remove("valid", "invalid"));
+    }
+});
+    </script>
+</body>
+</html>

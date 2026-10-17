@@ -1,0 +1,217 @@
+
+:root {
+    --bg: #cacfdb;
+    --panel: #2a3756;
+    --cell: #34446b;
+    --cell-hover: #3f5282;
+    --x: #ff6b6b;
+    --o: #4dd4c6;
+    --text:#ffffff;
+    --muted: #9aa7c7;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+/* ---------- Game container ---------- */
+.container {
+    width: 330px;
+    background: var(--panel);
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.symbols {
+    display: flex;
+    gap: 10px;
+    font-size: 22px;
+}
+
+.symbols i {
+    opacity: 0.35;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.symbols i:first-child { color: var(--x); }
+.symbols i:last-child  { color: var(--o); }
+
+.symbols i.active {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.turn {
+    font-size: 15px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.current-turn i {
+    font-size: 18px;
+}
+
+.button {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    background: var(--cell);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.3s;
+}
+
+.button:hover {
+    background: var(--cell-hover);
+    transform: rotate(90deg);
+}
+
+/* ---------- Board ---------- */
+.board {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.board:last-of-type {
+    margin-bottom: 0;
+}
+
+.cell {
+    flex: 1;
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+    background: var(--cell);
+    border-radius: 12px;
+    font-size: 44px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.cell:hover {
+    background: var(--cell-hover);
+}
+
+.cell.taken {
+    cursor: not-allowed;
+}
+
+.cell.x { color: var(--x); }
+.cell.o { color: var(--o); }
+
+.cell.win {
+    background: #4a5f96;
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+    50% { transform: scale(1.08); }
+}
+
+/* ---------- Stats ---------- */
+.stats {
+    width: 330px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.stats .player,
+.stats .drews {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 6px;
+    background: var(--panel);
+    border-radius: 12px;
+}
+
+.stats label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.stats span {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.score1 { color: var(--x); }
+.score2 { color: var(--o); }
+
+/* ---------- Overlay message ---------- */
+#overylay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 14, 26, 0.7);
+    z-index: 10;
+}
+
+#overylay.show {
+    display: flex;
+}
+
+#massage {
+    position: relative;
+    width: 280px;
+    padding: 36px 20px 24px;
+    background: var(--panel);
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: pop 0.3s ease;
+}
+
+#massage .content {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#massage .content i {
+    font-size: 28px;
+    margin-right: 6px;
+}
+
+#close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 18px;
+}
+
+#close:hover {
+    color: var(--text);
+}
